@@ -109,7 +109,6 @@ metilacionesunicas_tb2 <- join_tb2 %>% filter(is.na(variedad.y)) %>% filter(is.n
 metilacionesunicas_tn2 <- join_tn2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
 
 #Obtención de nombres y anotación de genes con biomart
-
 ensembl_plants <- useEnsemblGenomes(biomart = "plants_mart")
 searchDatasets(ensembl_plants, pattern = "Cucumis melo")
 ensembl_cucumis <- useEnsemblGenomes(biomart = "plants_mart", 
