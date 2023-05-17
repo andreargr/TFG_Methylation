@@ -4,12 +4,13 @@ library(openxlsx)
 
 setwd("C:/Users/Andrea/Desktop/CUARTO/TFG/metilacion")
 
+# Se juntan todos los data frame en una lista para facilitar la manipulación de los datos 
 files <- Sys.glob("*.tsv") #Vector con el NOMBRE de los archivos de cada variedad
 
 met_vector <- lapply(files, read.delim) #Lista con todos los df juntos
 names_vector <- c()
 
-for (file in files) { #Creación de un vector al que se le cambia el nombre del archivo para hacerlo mÃ¡s accesible
+for (file in files) { #Creación de un vector al que se le cambia el nombre del archivo para hacerlo más accesible
   name <- str_replace_all(file, "methylation_info_", "")
   name <- str_replace_all(name, ".tsv", "")
   names_vector[(length(names_vector) + 1)] = name #como un index
@@ -35,7 +36,7 @@ for (i in 1:length(met_vector)) {
   print(count(df))
   met_vector[[i]] <- df
 }
-#Metilaciones por cromosoma
+#Metilaciones totales por cromosoma
 for (i in 1:length(met_vector)) {
   df <- met_vector[[i]]
   df <- df %>% filter(chr=="chr10") 
@@ -78,15 +79,6 @@ num_igual_tb2tn2 <- join_tb2 %>% filter(join_tb2[,93] != "NA")
 
 join_tn2 <- met_vector$TN2 %>% left_join(met_vector$CH2,by= c("chr", "unique.id")) %>% left_join(met_vector$`AM3-6`,by= c("chr", "unique.id")) %>% left_join(met_vector$PSA2,by= c("chr", "unique.id")) %>% left_join(met_vector$PSU2,by= c("chr", "unique.id")) %>% left_join(met_vector$ROCH2,by= c("chr", "unique.id")) %>% left_join(met_vector$TB2,by= c("chr", "unique.id"))
 
-#Metilaciones únicas de cada variante
-metilacionesunicas_am3 <- join_am3 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
-metilacionesunicas_ch2 <- join_ch2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
-metilacionesunicas_psa2 <- join_psa2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
-metilacionesunicas_psu2 <- join_psu2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
-metilacionesunicas_roch2 <- join_roch2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
-metilacionesunicas_tb2 <- join_tb2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
-metilacionesunicas_tn2 <- join_tn2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
-
 #Metilaciones generales pertenecientes al pangenoma
 delete.na <- function(df, n=0) {
   df[rowSums(is.na(df)) <= n,]
@@ -106,14 +98,16 @@ p_chr09 <- pangenoma_metilacion %>% filter(chr=="chr09")%>% filter(Annotation.x 
 p_chr10 <- pangenoma_metilacion %>% filter(chr=="chr10")%>% filter(Annotation.x !="Intergenic")
 p_chr11 <- pangenoma_metilacion %>% filter(chr=="chr11")%>% filter(Annotation.x !="Intergenic")
 p_chr12 <- pangenoma_metilacion %>% filter(chr=="chr12")%>% filter(Annotation.x !="Intergenic")
-
-#Genes en metilaciones bases
-lista_cromosomas <- list(p_chr00,p_chr01,p_chr02,p_chr03,p_chr04,p_chr05,p_chr06,p_chr07,p_chr08,p_chr09,p_chr10,p_chr11,p_chr12)
-genes <- c("start.x","stop.x","Annotation.x")
-resultados_genes_metilacionbase <- lapply(lista_cromosomas, "[", genes)
-print(resultados_genes_metilacionbase[[1]][3])
-write.xlsx(resultados_genes_metilacionbase[[14]][3],"genes_ch13.xlsx")
  
+#Metilaciones únicas de cada variante
+metilacionesunicas_am3 <- join_am3 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
+metilacionesunicas_ch2 <- join_ch2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
+metilacionesunicas_psa2 <- join_psa2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
+metilacionesunicas_psu2 <- join_psu2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
+metilacionesunicas_roch2 <- join_roch2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
+metilacionesunicas_tb2 <- join_tb2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
+metilacionesunicas_tn2 <- join_tn2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
+
 #Obtención de nombres y anotación de genes con biomart
 
 ensembl_plants <- useEnsemblGenomes(biomart = "plants_mart")
@@ -207,6 +201,12 @@ ganotados_tn2 <- ganotados_tn2 %>% filter(go_id!="") %>% distinct(Nearest.Unigen
 
 ###########################         ANEXO           ###################################
 
+#Obtener los genes con metilaciones bases/pangenoma metilación
+lista_cromosomas <- list(p_chr00,p_chr01,p_chr02,p_chr03,p_chr04,p_chr05,p_chr06,p_chr07,p_chr08,p_chr09,p_chr10,p_chr11,p_chr12)
+genes <- c("start.x","stop.x","Annotation.x")
+resultados_genes_metilacionbase <- lapply(lista_cromosomas, "[", genes)
+print(resultados_genes_metilacionbase[[1]][3])
+write.xlsx(resultados_genes_metilacionbase[[14]][3],"genes_ch13.xlsx")
 #Obtener el ID de los genes metilados en distintas variedades en excel
 for (i in 1:length(met_vector)) {
   df <- met_vector[[i]]
