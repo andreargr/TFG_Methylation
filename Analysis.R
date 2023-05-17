@@ -132,7 +132,8 @@ metilacionesunicas_roch2 <- unique.genes(metilacionesunicas_roch2)
 metilacionesunicas_tb2 <- unique.genes(metilacionesunicas_tb2)
 metilacionesunicas_tn2 <- unique.genes(metilacionesunicas_tn2)
 
-annotation_search <- function(df){ #obtener aquellos genes que carecen de anotación para el script "tBlast_Annotation.R"
+############################### obtener aquellos genes que carecen de anotación para el script "tBlast_Annotation.R" ###############################
+annotation_search <- function(df){ 
   ganotados_cucumis <- merge(df,anotacion_cucumis,by= c("Nearest.Unigene.x")) 
   ganotados_cucumis <- ganotados_cucumis %>% dplyr::select("Nearest.Unigene.x","chr","start.x","stop.x","Annotation.x","description","go_id","peptide")
   
@@ -146,8 +147,8 @@ gnoanotados_cucumis <- annotation_search(metilacionesunicas_psu2)
 gnoanotados_cucumis <- annotation_search(metilacionesunicas_roch2)
 gnoanotados_cucumis <- annotation_search(metilacionesunicas_tb2)
 gnoanotados_cucumis <- annotation_search(metilacionesunicas_tn2)
-  
-#obtener genes anotados y no anotados de cada variedad
+ ###################################################################################################################################################
+
 #AM3-6
 ganotados_am3 <- merge(metilacionesunicas_am3,anotacion_cucumis, by= c("Nearest.Unigene.x"))
 ganotados_am3 <- ganotados_am3 %>% dplyr::select("Nearest.Unigene.x","chr","start.x","stop.x","Annotation.x","description","go_id","peptide")
