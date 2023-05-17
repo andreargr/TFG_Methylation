@@ -6,18 +6,18 @@ setwd("C:/Users/Andrea/Desktop/CUARTO/TFG/metilacion")
 
 files <- Sys.glob("*.tsv") #Vector con el NOMBRE de los archivos de cada variedad
 
-met_vector <- lapply(files, read.delim) #Vector con todos los df juntos
+met_vector <- lapply(files, read.delim) #Lista con todos los df juntos
 names_vector <- c()
 
-for (file in files) { #Creaci髇 de un vector al que se le cambia el nombre del archivo para hacerlo m谩s accesible
+for (file in files) { #Creaci贸n de un vector al que se le cambia el nombre del archivo para hacerlo m脙隆s accesible
   name <- str_replace_all(file, "methylation_info_", "")
   name <- str_replace_all(name, ".tsv", "")
   names_vector[(length(names_vector) + 1)] = name #como un index
 }
 
-names(met_vector) <- names_vector #Asignaci髇 de nombres a cada df
+names(met_vector) <- names_vector #Asignaci贸n de nombres a cada df
 
-for (i in 1:length(met_vector)) { #Adici髇 de una nueva columna en la que se indique la variedad a la que pertenece
+for (i in 1:length(met_vector)) { #Adici贸n de una nueva columna en la que se indique la variedad a la que pertenece
   df <- met_vector[[i]]
   df$variedad = names_vector[i] 
   met_vector[[i]] <- df
@@ -25,7 +25,7 @@ for (i in 1:length(met_vector)) { #Adici髇 de una nueva columna en la que se ind
 
 for (i in 1:length(met_vector)) {
   df <- met_vector[[i]]
-  df <- df %>% dplyr::select(!(15:20)) #se eliminan columnas vac韆s
+  df <- df %>% dplyr::select(!(15:20)) #se eliminan columnas vac铆as
   met_vector[[i]] <- df
 }
 
@@ -42,7 +42,7 @@ for (i in 1:length(met_vector)) {
   met_vector[[i]] <- df
 }
 
-#Joins de los distintos data frames y coincidencias de metilaci髇 entre especies
+#Joins de los distintos data frames y coincidencias de metilaci贸n entre especies
 join_am3 <- met_vector$`AM3-6` %>% left_join(met_vector$CH2,by= c("chr", "unique.id")) %>% left_join(met_vector$PSA2,by= c("chr", "unique.id")) %>% left_join(met_vector$PSU2,by= c("chr", "unique.id")) %>% left_join(met_vector$ROCH2,by= c("chr", "unique.id")) %>% left_join(met_vector$TB2,by= c("chr", "unique.id")) %>% left_join(met_vector$TN2,by= c("chr", "unique.id"))
 num_igual_am3ch2 <- join_am3 %>% filter(join_am3[,28] != "NA")
 num_igual_am3psa2 <- join_am3 %>% filter(join_am3[,41] != "NA")
@@ -78,7 +78,7 @@ num_igual_tb2tn2 <- join_tb2 %>% filter(join_tb2[,93] != "NA")
 
 join_tn2 <- met_vector$TN2 %>% left_join(met_vector$CH2,by= c("chr", "unique.id")) %>% left_join(met_vector$`AM3-6`,by= c("chr", "unique.id")) %>% left_join(met_vector$PSA2,by= c("chr", "unique.id")) %>% left_join(met_vector$PSU2,by= c("chr", "unique.id")) %>% left_join(met_vector$ROCH2,by= c("chr", "unique.id")) %>% left_join(met_vector$TB2,by= c("chr", "unique.id"))
 
-#Metilaciones 鷑icas de cada variante
+#Metilaciones 煤nicas de cada variante
 metilacionesunicas_am3 <- join_am3 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
 metilacionesunicas_ch2 <- join_ch2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
 metilacionesunicas_psa2 <- join_psa2 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
@@ -114,19 +114,19 @@ resultados_genes_metilacionbase <- lapply(lista_cromosomas, "[", genes)
 print(resultados_genes_metilacionbase[[1]][3])
 write.xlsx(resultados_genes_metilacionbase[[14]][3],"genes_ch13.xlsx")
  
-#Obtenci髇 de nombres y anotaci髇 de genes con biomart
+#Obtenci贸n de nombres y anotaci贸n de genes con biomart
 
 ensembl_plants <- useEnsemblGenomes(biomart = "plants_mart")
 searchDatasets(ensembl_plants, pattern = "Cucumis melo")
 ensembl_cucumis <- useEnsemblGenomes(biomart = "plants_mart", 
                                      dataset = "cmelo_eg_gene")
 
-#Anotaci髇 cucumis
+#Anotaci贸n cucumis
 anotacion_cucumis <- biomaRt::getBM(attributes = c("ensembl_gene_id","go_id","description","peptide"),mart= ensembl_cucumis)
 colnames(anotacion_cucumis)[3]  <- "Nearest.Unigene.x" 
 
 #Genes totales metilados anotados / no anotados de cada variedad
-unique.genes <- function(df){ #conocer el n鷐ero de genes metilados en cada variedad
+unique.genes <- function(df){ #conocer el n煤mero de genes metilados en cada variedad
   df <- df %>% distinct(Nearest.Unigene.x, .keep_all = TRUE) %>% dplyr::select(!(16:93)) 
 }
 
@@ -138,7 +138,7 @@ metilacionesunicas_roch2 <- unique.genes(metilacionesunicas_roch2)
 metilacionesunicas_tb2 <- unique.genes(metilacionesunicas_tb2)
 metilacionesunicas_tn2 <- unique.genes(metilacionesunicas_tn2)
 
-annotation_search <- function(df){ #obtener aquellos genes que carecen de anotaci髇 para el script "tBlast_Annotation.R"
+annotation_search <- function(df){ #obtener aquellos genes que carecen de anotaci贸n para el script "tBlast_Annotation.R"
   ganotados_cucumis <- merge(df,anotacion_cucumis,by= c("Nearest.Unigene.x")) 
   ganotados_cucumis <- ganotados_cucumis %>% dplyr::select("Nearest.Unigene.x","chr","start.x","stop.x","Annotation.x","description","go_id","peptide")
   
@@ -210,7 +210,7 @@ ganotados_tn2 <- ganotados_tn2 %>% filter(go_id!="") %>% distinct(Nearest.Unigen
 #Obtener el ID de los genes metilados en distintas variedades en excel
 for (i in 1:length(met_vector)) {
   df <- met_vector[[i]]
-  df <- df %>% filter(Annotation !="Intergenic") #se eliminan las metilaciones interg閚icas
+  df <- df %>% filter(Annotation !="Intergenic") #se eliminan las metilaciones interg茅nicas
   met_vector[[i]] <- df
 }
 genes <- c("chr","start","stop","Annotation")
@@ -224,7 +224,7 @@ write.xlsx(resultados_genes$ROCH2,"ROCHgenes.xlsx")
 write.xlsx(resultados_genes$TB2,"TB2genes.xlsx")
 write.xlsx(resultados_genes$TN2,"TN2genes.xlsx")
 
-#Genes metilaciones 鷑icas de cada variante en excel
+#Genes metilaciones 煤nicas de cada variante en excel
 lista_variedades <- list(metilacionesunicas_am3,metilacionesunicas_ch2,metilacionesunicas_psa2,metilacionesunicas_psu2,metilacionesunicas_roch2,metilacionesunicas_tb2,metilacionesunicas_tn2)
 genes <- c("chr","start.x","stop.x","Annotation.x")
 resultados_genes <- lapply(lista_variedades, "[", genes)
