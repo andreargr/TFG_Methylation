@@ -159,6 +159,8 @@ metilacionesunicas_roch2 <- unique.genes(metilacionesunicas_roch2)
 metilacionesunicas_tb2 <- unique.genes(metilacionesunicas_tb2)
 metilacionesunicas_tn2 <- unique.genes(metilacionesunicas_tn2)
 
+#para metilaciones coincidentes en todas las variedades
+pangenoma_metilacion <- unique.genes(pangenoma_metilacion)
 ############################### obtener aquellos genes que carecen de anotación para el script "tBlast_Annotation.R" ###############################
 annotation_search <- function(df){ 
   ganotados_cucumis <- merge(df,anotacion_cucumis,by= c("Nearest.Unigene.x")) 
@@ -174,6 +176,8 @@ gnoanotados_cucumis <- annotation_search(metilacionesunicas_psu2)
 gnoanotados_cucumis <- annotation_search(metilacionesunicas_roch2)
 gnoanotados_cucumis <- annotation_search(metilacionesunicas_tb2)
 gnoanotados_cucumis <- annotation_search(metilacionesunicas_tn2)
+
+gnoanotados_cucumis <- annotation_search(pangenoma_metilacion)
  ###################################################################################################################################################
 
 #AM3-6
@@ -225,6 +229,12 @@ ganotados_tn2 <- ganotados_tn2 %>% dplyr::select("Nearest.Unigene.x","chr","star
 gnoanotados_tn2 <- ganotados_tn2 %>% filter(go_id=="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
 ganotados_tn2 <- ganotados_tn2 %>% filter(go_id!="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
 
+#metilaciones base
+ganotados_p <- merge(pangenoma_metilacion,anotacion_cucumis, by= c("Nearest.Unigene.x"))
+ganotados_p <- ganotados_p %>% dplyr::select("Nearest.Unigene.x","chr","start.x","stop.x","Annotation.x","description","go_id","peptide")
+
+gnoanotados_p <- ganotados_p %>% filter(go_id=="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
+ganotados_p <- ganotados_p %>% filter(go_id!="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
 
 
 ###########################         ANEXO           ###################################

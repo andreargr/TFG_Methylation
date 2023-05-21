@@ -355,6 +355,8 @@ anotaciones_encontradasROCH2 <- Filter(function(x) length(x)!= 0, lapply(union, 
 anotaciones_encontradasTB2 <- Filter(function(x) length(x)!= 0, lapply(union, function(x) x))
 anotaciones_encontradasTN2 <- Filter(function(x) length(x)!= 0, lapply(union, function(x) x))
 
+anotaciones_encontradaspang <- Filter(function(x) length(x)!= 0, lapply(union, function(x) x))
+
 #evaluación de anotación
 colnames(ganotados_cucumis)[1] <-"gen" #Cambio nombre columna
 
@@ -468,6 +470,66 @@ F1_score <- (((2*true_positive)/(2*true_positive+false_positive+false_negative))
 print(F1_score)
 FDR <- (false_positive/(false_positive+true_positive))*100
 print(FDR)
+
+
+get.list <- function(df,lista,encontradas){ #pasar a lista los genes anotados y juntarlos en una lista única con las anotaciones encontradas.
+  for (i in 1:nrow(df)) {
+    gen_cucumis <- df[i, "gen"]
+    go_id <- df[i, "go_id"]
+    lista[[gen_cucumis]] <- c(lista[[gen_cucumis]],str_split(go_id,";"),use.names = TRUE)
+  }
+  lista <- c(lista,encontradas,use.names = TRUE)
+}
+
+#am3
+colnames(ganotados_am3)[1]  <- "gen"
+total_ganotados_am3 <- list()
+
+total_ganotados_am3 <- get.list(ganotados_am3,total_ganotados_am3,anotaciones_encontradasAM3)
+saveRDS(object = total_ganotados_am3, file = "total_ganotados_am3.rds")
+
+#ch2
+colnames(ganotados_ch2)[1]  <- "gen"
+total_ganotados_ch2 <- list()
+
+total_ganotados_ch2 <- get.list(ganotados_ch2,total_ganotados_ch2,anotaciones_encontradasCH2)
+saveRDS(object = total_ganotados_ch2, file = "total_ganotados_ch2.rds")
+
+#psa2
+colnames(ganotados_psa2)[1]  <- "gen"
+total_ganotados_psa2 <- list()
+
+total_ganotados_psa2 <- get.list(ganotados_psa2,total_ganotados_psa2,anotaciones_encontradasPSA2)
+saveRDS(object = total_ganotados_psa2, file = "total_ganotados_psa2.rds")
+
+#psu2
+colnames(ganotados_psu2)[1]  <- "gen"
+total_ganotados_psu2 <- list()
+
+total_ganotados_psu2 <- get.list(ganotados_psu2,total_ganotados_psu2,anotaciones_encontradasPSU2)
+saveRDS(object = total_ganotados_psu2, file = "total_ganotados_psu2.rds")
+
+#roch2
+colnames(ganotados_roch2)[1]  <- "gen"
+total_ganotados_roch2 <- list()
+
+total_ganotados_roch2 <- get.list(ganotados_roch2,total_ganotados_roch2,anotaciones_encontradasROCH2)
+saveRDS(object = total_ganotados_roch2, file = "total_ganotados_roch2.rds")
+
+#tb2
+colnames(ganotados_tb2)[1]  <- "gen"
+total_ganotados_tb2 <- list()
+
+total_ganotados_tb2 <- get.list(ganotados_tb2,total_ganotados_tb2,anotaciones_encontradasTB2)
+saveRDS(object = total_ganotados_tb2, file = "total_ganotados_tb2.rds")
+
+#pangenoma de metilación
+colnames(ganotados_p)[1]  <- "gen"
+total_ganotados_p <- list()
+
+total_ganotados_p <- get.list(ganotados_p,total_ganotados_p,anotaciones_encontradaspang)
+saveRDS(object = total_ganotados_p, file = "total_ganotados_pang.rds")
+
 
 #################################   ANEXO   #########################
 
