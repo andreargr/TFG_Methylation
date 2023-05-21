@@ -1,18 +1,18 @@
-# TFG - Análisis de metilación de variedades de melón usando secuenciación por nanoporos
-Código utilizado en el método y obtención de resultados para el análisis de metilación, anotación de genes no anotados de _Cucumis melo_ a partir de _Arabidopsis thaliana_ y _Vitis vinifera_ y relación de genes anotados totales con procesos de síntesis de compuestos orgánicos volátiles (VOCs) desarrollado en el Trabajo de Fin de Grado en la Universidad de Murcia durante el curso 2022/2023.
+# TFG - Methylation analysis of melon varieties using nanopore sequencing
+Code used in the method and results obtained for the analysis of methylation, annotation of unannotated genes of _Cucumis melo_ from _Arabidopsis thaliana_ and _Vitis vinifera_ and relationship of total annotated genes with processes of synthesis of volatile organic compounds (VOCs) developed in the Final Degree Project at the University of Murcia during the academic year 2022/2023.
 ## Scripts
--  **Analysis.R**: A partir de los resultados obtenidos de la secuenciación de nanoporos en formato TSV, se realiza la manipulación de datos para obtener el estudio de metilación de las distintas variedades por separado y en conjunto, permitiendo analizar metilaciones coincidentes y únicas de cada variedad entre otras características. 
+-  **Analysis.R**: From the results obtained from the nanoporous sequencing in TSV format, data manipulation is performed to obtain the methylation study of the different varieties separately and as a whole, allowing the analysis of coincident and unique methylations of each variety among other characteristics. 
 -  **tBlastn_Annotation.R**: A partir de los genes no anotados de cada variedad de _Cucumis melo_, se obtienen sus anotaciones mediante consultas a Biomart y realización de tBlastn. Además, de las anotaciones que se recuperan, selecciona cuáles de ellas se escogen para cada gen. También, contiene la funcionalidad necesaria para medir el rendimiento del método a través del cálculo de distintas métricas.
--  **BP_Research.R**: Una vez se tienen los genes con metilaciones únicas anotados, busca si entre las distintas anotaciones se encuentran aquellas relacionadas con procesos de síntesis de VOCs.
-## Dependencias
-Los scripts utilizan alguna o varias de las siguientes librerías:
-- **Tidyverse**: Conjunto de paquetes en R diseñados para ciencia de datos. Permite importar, transformar visualizar, modelar y comunicar conjuntos de datos.
-- **biomaRt**: Paquete que proporciona una interfaz a una colección de bases de datos que implementan el paquete de software BioMart (). En este caso, Ensembl Plants.
-- **openxlsx**: Paquete que permite leer, escribir y editar archivos xlsx.
-- **seqinr**: Paquete destinado al análisis y visualización de datos.
-- **dplyr**:  Paquete que proporciona una "gramática" para la manipulación y operaciones con data frames.
-## Ficheros de partida
-Los ficheros de partida son aquellos obtenidos a partir de la secuenciación de nanoporos. Hay uno para cada variedad:
+-  **BP_Research.R**: From the unannotated genes of each variety of _Cucumis melo_, its annotations are retrieved by querying Biomart and running tBlastn. In addition, from the annotations retrieved, it selects which of them are chosen for each gene. It also contains the necessary functionality to measure the performance of the method through the calculation of different metrics.
+## Dependencies
+Scripts use one or more of the following libraries:
+- **Tidyverse**: Set of R packages designed for data science. It allows importing, transforming, visualizing, modeling and communicating data sets.
+- **biomaRt**: Package that provides an interface to a collection of databases that implement the BioMart software package. In this case, Ensembl Plants.
+- **openxlsx**: Package that allows you to read, write and edit xlsx files.
+- **seqinr**: Package for data analysis and visualization.
+- **dplyr**:  Package that provides a "grammar" for manipulation and operations with data frames.
+## Starting files
+The starting files are those obtained from nanopore sequencing. There is one for each variety:
 - **methylation_info_AM3-6.tsv**
 - **methylation_info_CH2.tsv**
 - **methylation_info_PSA2.tsv**
@@ -20,8 +20,8 @@ Los ficheros de partida son aquellos obtenidos a partir de la secuenciación de 
 - **methylation_info_ROCH2.tsv**
 - **methylation_info_TN2.tsv**
 - **methylation_info_TB2.tsv**
-## Ficheros FASTA de los genomas
-También son necesarios los ficheros FASTA que contienen el genoma de los distintos organismos utilizados para  la ejecución del tBlastn.
+## FASTA files of genomes
+The FASTA files containing the genome of the different organisms used for the execution of tBlastn are also required..
 - **_Arabidopsis thaliana_**: https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_blastsets/TAIR10_cdna_20101214_updated
 - _**Solanum lycopersicum**_: https://solgenomics.net/ftp/tomato_genome/annotation/ITAG4.1_release/ITAG4.1_CDS.fasta
 - _**Vitis vinifera**_: https://ftp.ensemblgenomes.ebi.ac.uk/pub/plants/release-56/fasta/vitis_vinifera/cds/Vitis_vinifera.PN40024.v4.cds.all.fa.gz
