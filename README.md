@@ -21,7 +21,7 @@ The starting files are those obtained from nanopore sequencing. There is one for
 - **methylation_info_TN2.tsv**
 - **methylation_info_TB2.tsv**
 ## FASTA files of genomes
-The FASTA files containing the genome of the different organisms used for the execution of tBlastn are also required..
+The FASTA files containing the genome of the different organisms used for the execution of tBlastn are also required.
 - **_Arabidopsis thaliana_**: https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_blastsets/TAIR10_cdna_20101214_updated
 - _**Solanum lycopersicum**_: https://solgenomics.net/ftp/tomato_genome/annotation/ITAG4.1_release/ITAG4.1_CDS.fasta
 - _**Vitis vinifera**_: https://ftp.ensemblgenomes.ebi.ac.uk/pub/plants/release-56/fasta/vitis_vinifera/cds/Vitis_vinifera.PN40024.v4.cds.all.fa.gz
