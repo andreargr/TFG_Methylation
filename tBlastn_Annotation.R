@@ -154,7 +154,7 @@ for (i in 1:nrow(filtrado_CMArabidopsis_all)) {
 resultados_arabidopsis <- resultados_arabidopsis[-c(1),] #eliminamos la fila vac?a
 colnames(resultados_arabidopsis)[2]  <- "sacc" #cambiamos el nombre de la columna para realizar el leftjoin
 
-resultados_arabidopsis <- resultados_arabidopsis %>% filter(go_id != c("NA","")) %>% left_join(filtrado_CMArabidopsis_all, by = c("sacc")) %>% dplyr::select(,-(9:12)) #eliminamos genes sin anotacion
+resultados_arabidopsis <- resultados_arabidopsis %>% filter(go_id != "NA") %>% left_join(filtrado_CMArabidopsis_all, by = c("sacc")) %>% dplyr::select(,-(9:12)) #eliminamos genes sin anotacion
 resultados_arabidopsis <- resultados_arabidopsis %>% subset(go_id != "")
 #####################################
 #Para evaluación
@@ -238,7 +238,7 @@ genesNoAnotados <- unique(as.list(gnoanotados_cucumis$gen)) #lista con los genes
 #Arabidopsis thaliana - obtener la lista de listas con los resultados
 anotacion_arabidopsis <- list()
 for (i in 1:nrow(resultados_arabidopsis)) {
-  gen_cucumis <- resultados_arabidopsis[i, "qacc"]
+  gen_cucumis <- resultados_arabidopsis[i, "qacc.x"]
   go_id_ta <- resultados_arabidopsis[i, "go_id"]
 
   if (gen_cucumis %in% anotacion_arabidopsis){
@@ -355,7 +355,7 @@ anotaciones_encontradasROCH2 <- Filter(function(x) length(x)!= 0, lapply(union, 
 anotaciones_encontradasTB2 <- Filter(function(x) length(x)!= 0, lapply(union, function(x) x))
 anotaciones_encontradasTN2 <- Filter(function(x) length(x)!= 0, lapply(union, function(x) x))
 
-anotaciones_encontradaspang <- Filter(function(x) length(x)!= 0, lapply(union, function(x) x))
+anotaciones_encontradasbm <- Filter(function(x) length(x)!= 0, lapply(union, function(x) x))
 
 #evaluación de anotación
 colnames(ganotados_cucumis)[1] <-"gen" #Cambio nombre columna
@@ -523,12 +523,12 @@ total_ganotados_tb2 <- list()
 total_ganotados_tb2 <- get.list(ganotados_tb2,total_ganotados_tb2,anotaciones_encontradasTB2)
 saveRDS(object = total_ganotados_tb2, file = "total_ganotados_tb2.rds")
 
-#pangenoma de metilación
-colnames(ganotados_p)[1]  <- "gen"
-total_ganotados_p <- list()
+#metilaciones base
+colnames(ganotados_bm)[1]  <- "gen"
+total_ganotados_bm <- list()
 
-total_ganotados_p <- get.list(ganotados_p,total_ganotados_p,anotaciones_encontradaspang)
-saveRDS(object = total_ganotados_p, file = "total_ganotados_pang.rds")
+total_ganotados_bm <- get.list(ganotados_bm,total_ganotados_bm,anotaciones_encontradasbm)
+saveRDS(object = total_ganotados_bm, file = "total_ganotados_bm.rds")
 
 
 #################################   ANEXO   #########################

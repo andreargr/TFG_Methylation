@@ -99,26 +99,26 @@ guardar.csv(num_igual_roch2tb2,"coincidencias_rochtb.csv")
 guardar.csv(num_igual_roch2tn2,"coincidencias_rochtn.csv")
 guardar.csv(num_igual_tb2tn2,"coincidencias_tbtn.csv")
 
-#Metilaciones generales pertenecientes al pangenoma
+#Metilaciones base
 delete.na <- function(df, n=0) {
   df[rowSums(is.na(df)) <= n,]
 }
-pangenoma_metilacion <- delete.na(join_am3)
-guardar.csv(pangenoma_metilacion,"pangenoma_metilacion.csv")
+metilacion_base <- delete.na(join_am3)
+guardar.csv(metilacion_base,"metilacion_base.csv")
 
-p_chr00 <- pangenoma_metilacion %>% filter(chr=="chr00")%>% filter(Annotation.x !="Intergenic")
-p_chr01 <- pangenoma_metilacion %>% filter(chr=="chr01")%>% filter(Annotation.x !="Intergenic")
-p_chr02 <- pangenoma_metilacion %>% filter(chr=="chr02")%>% filter(Annotation.x !="Intergenic")
-p_chr03 <- pangenoma_metilacion %>% filter(chr=="chr03")%>% filter(Annotation.x !="Intergenic")
-p_chr04 <- pangenoma_metilacion %>% filter(chr=="chr04")%>% filter(Annotation.x !="Intergenic")
-p_chr05 <- pangenoma_metilacion %>% filter(chr=="chr05")%>% filter(Annotation.x !="Intergenic")
-p_chr06 <- pangenoma_metilacion %>% filter(chr=="chr06")%>% filter(Annotation.x !="Intergenic")
-p_chr07 <- pangenoma_metilacion %>% filter(chr=="chr07")%>% filter(Annotation.x !="Intergenic")
-p_chr08 <- pangenoma_metilacion %>% filter(chr=="chr08")%>% filter(Annotation.x !="Intergenic")
-p_chr09 <- pangenoma_metilacion %>% filter(chr=="chr09")%>% filter(Annotation.x !="Intergenic")
-p_chr10 <- pangenoma_metilacion %>% filter(chr=="chr10")%>% filter(Annotation.x !="Intergenic")
-p_chr11 <- pangenoma_metilacion %>% filter(chr=="chr11")%>% filter(Annotation.x !="Intergenic")
-p_chr12 <- pangenoma_metilacion %>% filter(chr=="chr12")%>% filter(Annotation.x !="Intergenic")
+bm_chr00 <- metilacion_base %>% filter(chr=="chr00")%>% filter(Annotation.x !="Intergenic")
+bm_chr01 <- metilacion_base %>% filter(chr=="chr01")%>% filter(Annotation.x !="Intergenic")
+bm_chr02 <- metilacion_base %>% filter(chr=="chr02")%>% filter(Annotation.x !="Intergenic")
+bm_chr03 <- metilacion_base %>% filter(chr=="chr03")%>% filter(Annotation.x !="Intergenic")
+bm_chr04 <- metilacion_base %>% filter(chr=="chr04")%>% filter(Annotation.x !="Intergenic")
+bm_chr05 <- metilacion_base %>% filter(chr=="chr05")%>% filter(Annotation.x !="Intergenic")
+bm_chr06 <- metilacion_base %>% filter(chr=="chr06")%>% filter(Annotation.x !="Intergenic")
+bm_chr07 <- metilacion_base %>% filter(chr=="chr07")%>% filter(Annotation.x !="Intergenic")
+bm_chr08 <- metilacion_base %>% filter(chr=="chr08")%>% filter(Annotation.x !="Intergenic")
+bm_chr09 <- metilacion_base %>% filter(chr=="chr09")%>% filter(Annotation.x !="Intergenic")
+bm_chr10 <- metilacion_base %>% filter(chr=="chr10")%>% filter(Annotation.x !="Intergenic")
+bm_chr11 <- metilacion_base %>% filter(chr=="chr11")%>% filter(Annotation.x !="Intergenic")
+bm_chr12 <- metilacion_base %>% filter(chr=="chr12")%>% filter(Annotation.x !="Intergenic")
  
 #Metilaciones únicas de cada variante
 metilacionesunicas_am3 <- join_am3 %>% filter(is.na(variedad.y)) %>% filter(is.na(variedad.x.x)) %>% filter(is.na(variedad.y.y)) %>%filter(is.na(variedad.x.x.x)) %>% filter(is.na(variedad.y.y.y)) %>% filter(is.na(variedad)) %>% filter(Annotation.x !="Intergenic")
@@ -160,7 +160,7 @@ metilacionesunicas_tb2 <- unique.genes(metilacionesunicas_tb2)
 metilacionesunicas_tn2 <- unique.genes(metilacionesunicas_tn2)
 
 #para metilaciones coincidentes en todas las variedades
-pangenoma_metilacion <- unique.genes(pangenoma_metilacion)
+metilacion_base <- unique.genes(metilacion_base)
 ############################### obtener aquellos genes que carecen de anotación para el script "tBlast_Annotation.R" ###############################
 annotation_search <- function(df){ 
   ganotados_cucumis <- merge(df,anotacion_cucumis,by= c("Nearest.Unigene.x")) 
@@ -177,7 +177,8 @@ gnoanotados_cucumis <- annotation_search(metilacionesunicas_roch2)
 gnoanotados_cucumis <- annotation_search(metilacionesunicas_tb2)
 gnoanotados_cucumis <- annotation_search(metilacionesunicas_tn2)
 
-gnoanotados_cucumis <- annotation_search(pangenoma_metilacion)
+gnoanotados_cucumis <- annotation_search(metilacion_base)
+gnoanotados_cucumis <- gnoanotados_cucumis %>% filter(Annotation.x !="Intergenic")
  ###################################################################################################################################################
 
 #AM3-6
@@ -230,16 +231,17 @@ gnoanotados_tn2 <- ganotados_tn2 %>% filter(go_id=="") %>% distinct(Nearest.Unig
 ganotados_tn2 <- ganotados_tn2 %>% filter(go_id!="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
 
 #metilaciones base
-ganotados_p <- merge(pangenoma_metilacion,anotacion_cucumis, by= c("Nearest.Unigene.x"))
-ganotados_p <- ganotados_p %>% dplyr::select("Nearest.Unigene.x","chr","start.x","stop.x","Annotation.x","description","go_id","peptide")
+metilacion_base <- metilacion_base %>% filter(Annotation.x !="Intergenic")
+ganotados_bm <- merge(metilacion_base,anotacion_cucumis, by= c("Nearest.Unigene.x"))
+ganotados_bm <- ganotados_bm %>% dplyr::select("Nearest.Unigene.x","chr","start.x","stop.x","Annotation.x","description","go_id","peptide")
 
-gnoanotados_p <- ganotados_p %>% filter(go_id=="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
-ganotados_p <- ganotados_p %>% filter(go_id!="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
+gnoanotados_bm <- ganotados_bm %>% filter(go_id=="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
+ganotados_bm <- ganotados_bm %>% filter(go_id!="") %>% distinct(Nearest.Unigene.x, .keep_all = TRUE)
 
 
 ###########################         ANEXO           ###################################
 
-#Obtener los genes con metilaciones bases/pangenoma metilación
+#Obtener los genes con metilaciones bases
 lista_cromosomas <- list(p_chr00,p_chr01,p_chr02,p_chr03,p_chr04,p_chr05,p_chr06,p_chr07,p_chr08,p_chr09,p_chr10,p_chr11,p_chr12)
 genes <- c("start.x","stop.x","Annotation.x")
 resultados_genes_metilacionbase <- lapply(lista_cromosomas, "[", genes)
